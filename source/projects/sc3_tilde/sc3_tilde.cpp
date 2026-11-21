@@ -358,13 +358,7 @@ static std::string sc3_bundle_resources()
 
 static void sc3_engine_config(t_sc3 *x, Sc3EngineConfig &cfg)
 {
-	/* Default: the bundled class library (and plugins next to it). Env
-	   SC3_APP_PATH uses an installed SuperCollider.app, version-checked. */
-	const std::string res = sc3_bundle_resources();
-	if (const char *app = std::getenv("SC3_APP_PATH"))
-		cfg.scAppPath = app;
-	else
-		cfg.classLibraryDir = res;
+	sc3SelectLibrary(cfg, sc3_bundle_resources());
 	/* 4.x: World UDP port. Precedence: `@port N` from the patch → env
 	   SC3_PORT (tests/CLI) → **0 = AUTO** (the kernel picks a free one, so the
 	   SC IDE — which always takes 57110 — and sc3~ coexist). The real port shows
@@ -375,8 +369,6 @@ static void sc3_engine_config(t_sc3 *x, Sc3EngineConfig &cfg)
 		wantPort = port ? std::atoll(port) : 0;
 	}
 	cfg.port = (int)std::max<long>(0, std::min<long>(wantPort, 65535));
-	if (!res.empty())
-		cfg.compatDir = res + "/SCMaxCompat";
 	/* 3.2: the World has to be born at the DSP chain's sample rate. With DSP off
 	   `dsp64` has not run yet (x->sr == 0), but Max already has the driver's
 	   sample rate configured: `sys_getsr()` returns it anyway. That way the normal

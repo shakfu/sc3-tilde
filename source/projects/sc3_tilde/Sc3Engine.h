@@ -75,6 +75,10 @@ struct Sc3EngineConfig {
 	bool allowScVersion = false;
 };
 
+// sc3~'s library source: env SC3_APP_PATH (an installed app, version-checked at boot)
+// wins over the bundle's Resources. SCMaxCompat always comes from the bundle.
+void sc3SelectLibrary(Sc3EngineConfig &cfg, const std::string &bundleResources);
+
 struct Sc3EngineStatus {
 	bool ready = false;
 	bool booting = false;        // open() returned; the worker is still booting (3.1)

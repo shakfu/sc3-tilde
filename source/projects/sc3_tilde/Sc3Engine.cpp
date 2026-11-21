@@ -1463,6 +1463,16 @@ Sc3Engine &Sc3Engine::instance()
 	return engine;
 }
 
+void sc3SelectLibrary(Sc3EngineConfig &cfg, const std::string &bundleResources)
+{
+	if (const char *app = std::getenv("SC3_APP_PATH"))
+		cfg.scAppPath = app;
+	else
+		cfg.classLibraryDir = bundleResources;
+	if (!bundleResources.empty())
+		cfg.compatDir = bundleResources + "/SCMaxCompat";
+}
+
 Sc3Engine::Sc3Engine() : m(new Impl) {}
 Sc3Engine::~Sc3Engine()
 {

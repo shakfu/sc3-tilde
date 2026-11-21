@@ -168,7 +168,9 @@ target_include_directories(sc3_quarks_test SYSTEM PRIVATE ${SC_SYSTEM_INCLUDES})
 target_compile_features(sc3_quarks_test PRIVATE cxx_std_17)
 target_compile_options(sc3_quarks_test PRIVATE ${SC_WARNINGS})
 target_link_libraries(sc3_quarks_test PRIVATE ${SC_LIBS})
-foreach(_mode ok broken)
+foreach(_mode ok broken appwrong)
     add_test(NAME sc3_tilde_quarks_${_mode}
         COMMAND sc3_quarks_test "${SC3_MXO}/Contents/Resources" ${_mode})
 endforeach()
+add_test(NAME sc3_tilde_quarks_app
+    COMMAND sc3_quarks_test "${SC3_MXO}/Contents/Resources" app "${SC_APP}")
